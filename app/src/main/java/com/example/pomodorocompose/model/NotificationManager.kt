@@ -2,6 +2,7 @@ package com.example.pomodorocompose.model
 
 import android.Manifest
 import android.app.Activity
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -12,10 +13,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.pomodorocompose.R
 
-class NotificationHelper(private val context: Context) {
+class NotificationManager(private val context: Context) {
 
-    private val notificationManager: NotificationManagerCompat =
+    private val notificationManager: NotificationManagerCompat by lazy {
         NotificationManagerCompat.from(context)
+    }
 
     init {
         createNotificationChannel()
@@ -30,8 +32,7 @@ class NotificationHelper(private val context: Context) {
         }
         notificationManager.createNotificationChannel(channel)
     }
-
-    fun showNotification(message: String) {
+    private fun createNotification(message: String) : Notification{
         val builder = NotificationCompat.Builder(context, MY_CHANNEL_ID)
             .setSmallIcon(R.drawable.alarm)
             .setContentTitle("Pomodoro")
@@ -39,18 +40,23 @@ class NotificationHelper(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
+        return builder.build()
+    }
+    private fun showNotification(notification : Notification) {
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             requestNotificationPermission()
-            return
-        }
 
-        notificationManager.notify(MY_NOTIFICATION_ID, builder.build())
+        }
+        notificationManager.notify(MY_NOTIFICATION_ID, notification)
     }
 
+    fun createAndShowNotification(message: String) {
+        showNotification(createNotification(message))
+    }
     private fun requestNotificationPermission() {
         val shouldShowRationale = ActivityCompat.shouldShowRequestPermissionRationale(
             context as Activity,
@@ -71,7 +77,6 @@ class NotificationHelper(private val context: Context) {
             )
         }
     }
-
     companion object {
         private const val CHANNEL_NAME = "Channel Name"
         private const val DESCRIPTION = "Notification Channel Description"

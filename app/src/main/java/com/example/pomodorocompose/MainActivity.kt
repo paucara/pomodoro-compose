@@ -9,8 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.example.pomodorocompose.model.NotificationHelper
-import com.example.pomodorocompose.ui.screens.PomodoroScreen
+import com.example.pomodorocompose.model.NotificationManager
+import com.example.pomodorocompose.ui.screens.MainScreen
 import com.example.pomodorocompose.ui.screens.PomodoroViewModel
 import com.example.pomodorocompose.ui.theme.PomodoroComposeTheme
 import kotlinx.coroutines.flow.drop
@@ -20,16 +20,17 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel : PomodoroViewModel by viewModels()
 
-    private lateinit var notificationHelper : NotificationHelper
+    private lateinit var notificationManager : NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        notificationHelper = NotificationHelper(this)
+        notificationManager = NotificationManager(this)
+
 
         lifecycleScope.launch {
             viewModel.message.drop(1).collect{message->
-                notificationHelper.showNotification(message)
+                notificationManager.createAndShowNotification(message)
             }
         }
 
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PomodoroScreen(viewModel)
+                    MainScreen(viewModel)
                 }
             }
         }

@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pomodorocompose.R
 
 @Composable
-fun PomodoroScreen(
+fun MainScreen(
     viewModel: PomodoroViewModel
 ){
     val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
