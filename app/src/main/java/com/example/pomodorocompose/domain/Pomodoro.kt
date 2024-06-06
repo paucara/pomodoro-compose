@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.model
+package com.example.pomodorocompose.domain
 
 import com.example.pomodorocompose.utils.formatTime
 import kotlinx.coroutines.CoroutineScope
@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class Pomodoro(private val scope : CoroutineScope) {
+class Pomodoro @Inject constructor(private val scope : CoroutineScope) {
 
     private val pomodoroFlow = MutableStateFlow(POMODORO_DURATION)
     private var pomodoroJob: Job? = null

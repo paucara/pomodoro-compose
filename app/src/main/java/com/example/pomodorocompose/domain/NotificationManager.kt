@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.model
+package com.example.pomodorocompose.domain
 
 import android.Manifest
 import android.app.Activity
@@ -12,25 +12,23 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.pomodorocompose.R
+import javax.inject.Inject
 
-class NotificationManager(private val context: Context) {
-
-    private val notificationManager: NotificationManagerCompat by lazy {
-        NotificationManagerCompat.from(context)
+class NotificationManager @Inject constructor(
+    private val context: Context
+) {
+    private val notificationManager: NotificationManagerCompat =
+        NotificationManagerCompat.from(context).also {
+        it.createNotificationChannel(createNotificationChannel())
     }
 
-    init {
-        createNotificationChannel()
-    }
-
-    private fun createNotificationChannel() {
+    private fun createNotificationChannel() : NotificationChannel{
         val name = CHANNEL_NAME
         val descriptionText = DESCRIPTION
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(MY_CHANNEL_ID, name, importance).apply {
+        return NotificationChannel(MY_CHANNEL_ID, name, importance).apply {
             description = descriptionText
         }
-        notificationManager.createNotificationChannel(channel)
     }
     private fun createNotification(message: String) : Notification{
         val builder = NotificationCompat.Builder(context, MY_CHANNEL_ID)
@@ -39,7 +37,6 @@ class NotificationManager(private val context: Context) {
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
-
         return builder.build()
     }
     private fun showNotification(notification : Notification) {
@@ -49,11 +46,9 @@ class NotificationManager(private val context: Context) {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             requestNotificationPermission()
-
         }
         notificationManager.notify(MY_NOTIFICATION_ID, notification)
     }
-
     fun createAndShowNotification(message: String) {
         showNotification(createNotification(message))
     }

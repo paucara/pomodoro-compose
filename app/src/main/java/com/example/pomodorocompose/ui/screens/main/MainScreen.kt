@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.ui.screens
+package com.example.pomodorocompose.ui.screens.main
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +21,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pomodorocompose.R
+import com.example.pomodorocompose.domain.NotificationManager
 
 @Composable
 fun MainScreen(
-    viewModel: PomodoroViewModel
+    viewModel: MainViewModel
 ){
     val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()

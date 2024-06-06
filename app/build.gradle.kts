@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -69,4 +71,11 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
 
+    implementation("com.google.dagger:hilt-android:2.51")
+    kapt("com.google.dagger:hilt-android-compiler:2.51")
+
+}
+
+kapt {
+    correctErrorTypes = true
 }

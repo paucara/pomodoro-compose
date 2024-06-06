@@ -1,12 +1,14 @@
-package com.example.pomodorocompose.ui.screens
+package com.example.pomodorocompose.ui.screens.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.pomodorocompose.model.Pomodoro
+import com.example.pomodorocompose.domain.Pomodoro
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PomodoroViewModel : ViewModel() {
-
-    private val pomodoro = Pomodoro(viewModelScope)
+@HiltViewModel
+class MainViewModel  @Inject constructor(
+    private val pomodoro : Pomodoro
+) : ViewModel() {
 
     val uiState = pomodoro.pomodoroPause
     val time = pomodoro.formattedTime
@@ -21,7 +23,6 @@ class PomodoroViewModel : ViewModel() {
     fun pause(){
         pomodoro.pause()
     }
-
 }
 
 
