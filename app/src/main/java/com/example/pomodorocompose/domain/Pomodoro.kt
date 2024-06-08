@@ -12,21 +12,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class Pomodoro @Inject constructor(private val scope : CoroutineScope) {
-
+class Pomodoro @Inject constructor(
+    private val scope : CoroutineScope,
+    private val notificationManager: NotificationManager
+) {
     private val pomodoroFlow = MutableStateFlow(POMODORO_DURATION)
     private var pomodoroJob: Job? = null
     private var pomodoroBreak = true
     private var pomodoroLoops = 0
-
     private val _pomodoroPause = MutableStateFlow(false)
     val pomodoroPause: StateFlow<Boolean> = _pomodoroPause.asStateFlow()
-
-    private var _message = MutableStateFlow("")
-    val message : StateFlow<String> = _message.asStateFlow()
-
     val formattedTime: Flow<String> = pomodoroFlow.map { formatTime(it) }
-
     fun start() {
         _pomodoroPause.value = true
         pomodoroJob = scope.launch {
@@ -37,12 +33,10 @@ class Pomodoro @Inject constructor(private val scope : CoroutineScope) {
             pomodoro()
         }
     }
-
     fun pause() {
         _pomodoroPause.value = false
         pomodoroJob?.cancel()
     }
-
     fun cancel() {
         _pomodoroPause.value = false
         pomodoroJob?.cancel()
@@ -50,7 +44,6 @@ class Pomodoro @Inject constructor(private val scope : CoroutineScope) {
         pomodoroBreak = true
         pomodoroLoops = 0
     }
-
     private fun pomodoro() {
         _pomodoroPause.value = false
         pomodoroJob?.cancel()
@@ -62,17 +55,14 @@ class Pomodoro @Inject constructor(private val scope : CoroutineScope) {
                 pomodoroFlow.value = LONG_REST_DURATION
                 pomodoroLoops = 0
             }
-
-            _message.value = "Time to rest"
+            notificationManager.createAndShowNotification("Time to rest")
             pomodoroBreak = false
         } else {
             pomodoroFlow.value = POMODORO_DURATION
             pomodoroBreak = true
-            _message.value = "Time to study"
-
+            notificationManager.createAndShowNotification("Time to study")
         }
     }
-
     companion object {
         private const val POMODORO_DURATION = 5000L
         private const val LONG_REST_DURATION = 3000L
@@ -80,5 +70,4 @@ class Pomodoro @Inject constructor(private val scope : CoroutineScope) {
         private const val SECOND_DURATION = 1000L
         private const val POMODORO_LOOPS = 3
     }
-
 }

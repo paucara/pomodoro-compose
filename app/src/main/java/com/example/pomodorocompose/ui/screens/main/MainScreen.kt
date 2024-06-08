@@ -1,90 +1,92 @@
 package com.example.pomodorocompose.ui.screens.main
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.pomodorocompose.R
-import com.example.pomodorocompose.domain.NotificationManager
+import com.example.pomodorocompose.ui.screens.pomodoro.PomodoroScreen
+import com.example.pomodorocompose.ui.screens.settings.SettingsScreen
 
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel
-){
-    val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-
-    Column(modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+fun MainScreen(){
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(navController = navController)
+        }
     ) {
-        Timer(time.value)
-        Buttons(viewModel::start, viewModel::pause, viewModel::cancel, uiState.value)
-    }
-}
-
-@Composable
-fun Buttons(
-    start : ()->Unit,
-    pause : ()->Unit,
-    stop : ()->Unit,
-    uiState: Boolean
-) {
-    Row(
-        Modifier
-            .animateContentSize()
-    ) {
-        when(uiState){
-            true -> {
-                TimerButton(action = pause, text = "pause", painter = R.drawable.pause)
-                Spacer(modifier = Modifier.width(5.dp))
-                TimerButton(action = stop, text = "stop",  painter = R.drawable.stop)
-            }
-            false -> {
-                TimerButton(action = start, text = "start",  painter = R.drawable.play)
-            }
+        Column(Modifier.padding(it)) {
+            MyNavHost(navController = navController)
         }
     }
 }
 
 @Composable
-fun Timer(time : String?) {
-    if (time != null) {
-        Text(
-            text = time,
-            style = MaterialTheme.typography.displayLarge
-        )
+fun MyNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = NavigationItem.Pomodoro.route,
+
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
+
+    ) {
+        composable(
+            NavigationItem.Pomodoro.route
+        ){ PomodoroScreen() }
+        composable(
+            NavigationItem.Settings.route
+        ){ SettingsScreen() }
     }
 }
 
 @Composable
-fun TimerButton(action: () -> Unit, text: String, painter: Int) {
-    Button(
-        onClick = action,
-        modifier = Modifier.size(60.dp),
-        shape = CircleShape,
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Icon(
-            modifier = Modifier.size(30.dp),
-            painter = painterResource(id = painter),
-            contentDescription = text
-        )
+fun BottomNavigationBar(navController: NavHostController) {
+    val items = listOf(
+        NavigationItem.Pomodoro,
+        NavigationItem.Settings
+    )
+    NavigationBar {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
+        items.forEach{ item ->
+            NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = null) },
+                label = { Text(item.route) },
+                onClick = { navController.navigate(item.route){
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+
+                } },
+                selected = currentRoute == item.route
+            )
+
+        }
     }
+
 }

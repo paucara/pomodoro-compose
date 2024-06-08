@@ -1,4 +1,7 @@
 package com.example.pomodorocompose.ui.screens.settings
 
-class SettingsViewModel {
+import androidx.lifecycle.ViewModel
+
+class SettingsViewModel : ViewModel() {
+
 }
