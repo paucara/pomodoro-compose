@@ -1,4 +1,31 @@
 package com.example.pomodorocompose.model
 
-class SettingsRepository {
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import javax.inject.Inject
+
+class SettingsRepository @Inject constructor(private val settingsDataSource: SettingsDataSource) {
+
+    val settings: Flow<PomodoroSettings> =
+        combine(
+            settingsDataSource.pomodoroDuration,
+            settingsDataSource.longRestDuration,
+            settingsDataSource.shortRestDuration,
+            settingsDataSource.pomodoroLoops,
+        ) { pomodoroDuration, longRestDuration, shortRestDuration, pomodoroLoops ->
+            PomodoroSettings(pomodoroDuration, longRestDuration, shortRestDuration, pomodoroLoops)
+        }
+
+    suspend fun setPomodoroDuration(value : Long){
+        settingsDataSource.setPomodoroDuration(value)
+    }
+    suspend fun setLongRestDuration(value : Long){
+        settingsDataSource.setLongRestDuration(value)
+    }
+    suspend fun setShortRestDuration(value : Long){
+        settingsDataSource.setShortRestDuration(value)
+    }
+    suspend fun setPomodoroLoops(value : Int){
+        settingsDataSource.setPomodoroLoops(value)
+    }
 }

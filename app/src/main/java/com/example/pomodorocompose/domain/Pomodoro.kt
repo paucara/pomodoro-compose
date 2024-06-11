@@ -1,5 +1,6 @@
 package com.example.pomodorocompose.domain
 
+import com.example.pomodorocompose.model.SettingsRepository
 import com.example.pomodorocompose.utils.formatTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -14,9 +15,11 @@ import javax.inject.Inject
 
 class Pomodoro @Inject constructor(
     private val scope : CoroutineScope,
-    private val notificationManager: NotificationManager
+    private val notificationManager: NotificationManager,
+    private val settingsRepository: SettingsRepository
 ) {
     private val pomodoroFlow = MutableStateFlow(POMODORO_DURATION)
+
     private var pomodoroJob: Job? = null
     private var pomodoroBreak = true
     private var pomodoroLoops = 0
@@ -30,6 +33,7 @@ class Pomodoro @Inject constructor(
                 pomodoroFlow.value -= SECOND_DURATION
                 delay(SECOND_DURATION)
             }
+            launchSettingsUpdate()
             pomodoro()
         }
     }
@@ -63,6 +67,14 @@ class Pomodoro @Inject constructor(
             notificationManager.createAndShowNotification("Time to study")
         }
     }
+
+    //TODO : Fixed
+    private suspend fun launchSettingsUpdate() {
+        settingsRepository.settings.collect { settings ->
+            pomodoroFlow.value = settings.pomodoroDuration
+        }
+    }
+
     companion object {
         private const val POMODORO_DURATION = 5000L
         private const val LONG_REST_DURATION = 3000L

@@ -1,11 +1,7 @@
 package com.example.pomodorocompose.ui.screens.main
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -16,13 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.pomodorocompose.R
 import com.example.pomodorocompose.ui.screens.pomodoro.PomodoroScreen
 import com.example.pomodorocompose.ui.screens.settings.SettingsScreen
 
@@ -45,7 +39,7 @@ fun MyNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = NavigationItem.Pomodoro.route,
-
+        //TODO : Fix none animation
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
 
@@ -85,8 +79,6 @@ fun BottomNavigationBar(navController: NavHostController) {
                 } },
                 selected = currentRoute == item.route
             )
-
         }
     }
-
 }

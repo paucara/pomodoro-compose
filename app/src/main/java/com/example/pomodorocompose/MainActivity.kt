@@ -8,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.pomodorocompose.ui.screens.main.MainScreen
-import com.example.pomodorocompose.ui.screens.pomodoro.PomodoroScreen
 import com.example.pomodorocompose.ui.theme.PomodoroComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 

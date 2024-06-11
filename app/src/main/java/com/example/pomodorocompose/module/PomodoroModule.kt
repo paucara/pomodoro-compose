@@ -3,6 +3,8 @@ package com.example.pomodorocompose.module
 import android.content.Context
 import com.example.pomodorocompose.domain.NotificationManager
 import com.example.pomodorocompose.domain.Pomodoro
+import com.example.pomodorocompose.model.SettingsDataSource
+import com.example.pomodorocompose.model.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +17,18 @@ import kotlinx.coroutines.SupervisorJob
 @InstallIn(ViewModelComponent::class)
 class PomodoroModule {
     @Provides
+    fun provideSettingsDataSource(
+        @ApplicationContext context: Context
+    ) : SettingsDataSource {
+        return SettingsDataSource(context)
+    }
+    @Provides
+    fun provideSettingsRepository(
+        settingsDataSource: SettingsDataSource
+    ): SettingsRepository {
+        return SettingsRepository(settingsDataSource)
+    }
+    @Provides
     fun provideNotificationManager(
         @ApplicationContext context: Context
     ) : NotificationManager {
@@ -25,7 +39,11 @@ class PomodoroModule {
         return CoroutineScope(SupervisorJob())
     }
     @Provides
-    fun providePomodoro(coroutineScope: CoroutineScope, notificationManager: NotificationManager): Pomodoro {
-        return Pomodoro(coroutineScope, notificationManager)
+    fun providePomodoro(
+        coroutineScope: CoroutineScope,
+        notificationManager: NotificationManager,
+        settingsRepository: SettingsRepository
+    ): Pomodoro {
+        return Pomodoro(coroutineScope, notificationManager, settingsRepository)
     }
 }
