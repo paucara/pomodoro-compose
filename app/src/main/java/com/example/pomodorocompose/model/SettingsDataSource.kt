@@ -5,9 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -15,47 +15,65 @@ class SettingsDataSource @Inject constructor(private val context: Context) {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-    val pomodoroDuration: Flow<Long> = context.dataStore.data
+    val pomodoroDuration: Flow<Int> = context.dataStore.data
         .map { preferences ->
-            preferences[POMODORO_DURATION] ?: 25000L
+            preferences[POMODORO_DURATION] ?: 25
         }
-    val longRestDuration: Flow<Long> = context.dataStore.data
+    val longRestDuration: Flow<Int> = context.dataStore.data
         .map { preferences ->
-            preferences[LONG_REST_DURATION] ?: 15000L
+            preferences[LONG_REST_DURATION] ?: 15
         }
-    val shortRestDuration: Flow<Long> = context.dataStore.data
+    val shortRestDuration: Flow<Int> = context.dataStore.data
         .map { preferences ->
-            preferences[SHORT_REST_DURATION] ?: 5000L
+            preferences[SHORT_REST_DURATION] ?: 5
         }
     val pomodoroLoops: Flow<Int> = context.dataStore.data
         .map { preferences ->
             preferences[POMODORO_LOOPS] ?: 4
         }
 
-    suspend fun setPomodoroDuration(value : Long){
-        context.dataStore.edit { settings ->
-            settings[POMODORO_DURATION] = value
+    suspend fun setPomodoroDuration(value : Int){
+        context.dataStore.edit { preferences ->
+            val currentValue = preferences[POMODORO_DURATION] ?: 25
+            val newValue = currentValue + value
+            preferences[POMODORO_DURATION] = newValue
         }
     }
-    suspend fun setLongRestDuration(value : Long){
-        context.dataStore.edit { settings ->
-            settings[LONG_REST_DURATION] = value
+    suspend fun setLongRestDuration(value : Int){
+        context.dataStore.edit { preferences ->
+            val currentValue = preferences[LONG_REST_DURATION] ?: 15
+            val newValue = currentValue + value
+            preferences[LONG_REST_DURATION] = newValue
         }
     }
-    suspend fun setShortRestDuration(value : Long){
-        context.dataStore.edit { settings ->
-            settings[SHORT_REST_DURATION] = value
+    suspend fun setShortRestDuration(value : Int){
+        context.dataStore.edit { preferences ->
+            val currentValue = preferences[SHORT_REST_DURATION] ?: 5
+            val newValue = currentValue + value
+            preferences[SHORT_REST_DURATION] = newValue
         }
     }
     suspend fun setPomodoroLoops(value : Int){
-        context.dataStore.edit { settings ->
-            settings[POMODORO_LOOPS] = value
+        context.dataStore.edit { preferences ->
+            val currentValue = preferences[POMODORO_LOOPS] ?: 4
+            val newValue = currentValue + value
+            preferences[POMODORO_LOOPS] = newValue
         }
     }
+
+    suspend fun getSettings() : PomodoroSettings{
+        return PomodoroSettings(
+            context.dataStore.data.first()[POMODORO_DURATION] ?: 25,
+            context.dataStore.data.first()[LONG_REST_DURATION] ?: 15,
+            context.dataStore.data.first()[SHORT_REST_DURATION] ?: 5,
+            context.dataStore.data.first()[POMODORO_LOOPS] ?: 4
+        )
+    }
+
     companion object{
-        val POMODORO_DURATION = longPreferencesKey("pomodoro_duration")
-        val LONG_REST_DURATION = longPreferencesKey("long_rest_duration")
-        val SHORT_REST_DURATION = longPreferencesKey("short_rest_duration")
+        val POMODORO_DURATION = intPreferencesKey("pomodoro_duration")
+        val LONG_REST_DURATION = intPreferencesKey("long_rest_duration")
+        val SHORT_REST_DURATION = intPreferencesKey("short_rest_duration")
         val POMODORO_LOOPS = intPreferencesKey("pomodoro_loops")
     }
 }

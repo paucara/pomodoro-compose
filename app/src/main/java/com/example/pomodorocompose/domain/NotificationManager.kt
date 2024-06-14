@@ -1,13 +1,11 @@
 package com.example.pomodorocompose.domain
 
 import android.Manifest
-import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -45,38 +43,17 @@ class NotificationManager @Inject constructor(
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestNotificationPermission()
+            return
         }
         notificationManager.notify(MY_NOTIFICATION_ID, notification)
     }
     fun createAndShowNotification(message: String) {
         showNotification(createNotification(message))
     }
-    private fun requestNotificationPermission() {
-        val shouldShowRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-            context as Activity,
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-
-        if (shouldShowRationale) {
-            Toast.makeText(
-                context,
-                "The application needs permission to display notifications",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            ActivityCompat.requestPermissions(
-                context,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                NOTIFICATION_PERMISSION_REQUEST_CODE
-            )
-        }
-    }
     companion object {
         private const val CHANNEL_NAME = "Channel Name"
         private const val DESCRIPTION = "Notification Channel Description"
         private const val MY_CHANNEL_ID = "My_Channel_ID"
         private const val MY_NOTIFICATION_ID = 123
-        private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 456
     }
 }

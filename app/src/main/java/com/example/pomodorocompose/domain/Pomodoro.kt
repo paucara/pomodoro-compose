@@ -17,23 +17,37 @@ class Pomodoro @Inject constructor(
     private val scope : CoroutineScope,
     private val notificationManager: NotificationManager,
     private val settingsRepository: SettingsRepository
-) {
-    private val pomodoroFlow = MutableStateFlow(POMODORO_DURATION)
+){
+    init {
+        settingsUpdate()
+    }
+
+    private var POMODORO_DURATION = 0L
+    private var LONG_REST_DURATION = 0L
+    private var SHORT_REST_DURATION = 0L
+    private var POMODORO_LOOPS = 0
+
+    private var pomodoroFlow = MutableStateFlow(POMODORO_DURATION)
 
     private var pomodoroJob: Job? = null
     private var pomodoroBreak = true
     private var pomodoroLoops = 0
+
     private val _pomodoroPause = MutableStateFlow(false)
     val pomodoroPause: StateFlow<Boolean> = _pomodoroPause.asStateFlow()
+
     val formattedTime: Flow<String> = pomodoroFlow.map { formatTime(it) }
+
+    var isRunning = false
+
     fun start() {
+        isRunning = true
         _pomodoroPause.value = true
         pomodoroJob = scope.launch {
             while (pomodoroFlow.value > 0) {
                 pomodoroFlow.value -= SECOND_DURATION
                 delay(SECOND_DURATION)
             }
-            launchSettingsUpdate()
             pomodoro()
         }
     }
@@ -68,18 +82,17 @@ class Pomodoro @Inject constructor(
         }
     }
 
-    //TODO : Fixed
-    private suspend fun launchSettingsUpdate() {
-        settingsRepository.settings.collect { settings ->
-            pomodoroFlow.value = settings.pomodoroDuration
+    fun settingsUpdate() {
+        scope.launch {
+            val settings = settingsRepository.getSettings()
+            POMODORO_DURATION = (settings.pomodoroDuration * 1000).toLong()
+            pomodoroFlow.value = POMODORO_DURATION
+            LONG_REST_DURATION = (settings.longRestDuration * 100).toLong()
+            SHORT_REST_DURATION = (settings.shortRestDuration * 1000).toLong()
+            POMODORO_LOOPS = settings.pomodoroLoops
         }
     }
-
-    companion object {
-        private const val POMODORO_DURATION = 5000L
-        private const val LONG_REST_DURATION = 3000L
-        private const val SHORT_REST_DURATION = 2000L
+    companion object{
         private const val SECOND_DURATION = 1000L
-        private const val POMODORO_LOOPS = 3
     }
 }

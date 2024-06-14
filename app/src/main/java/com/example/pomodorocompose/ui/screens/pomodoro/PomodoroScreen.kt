@@ -28,7 +28,7 @@ fun PomodoroScreen(
     viewModel : PomodoroViewModel = hiltViewModel()
 ){
     val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle(initialValue = false)
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

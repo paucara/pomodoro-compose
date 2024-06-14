@@ -16,16 +16,20 @@ class SettingsRepository @Inject constructor(private val settingsDataSource: Set
             PomodoroSettings(pomodoroDuration, longRestDuration, shortRestDuration, pomodoroLoops)
         }
 
-    suspend fun setPomodoroDuration(value : Long){
+    suspend fun setPomodoroDuration(value : Int){
         settingsDataSource.setPomodoroDuration(value)
     }
-    suspend fun setLongRestDuration(value : Long){
+    suspend fun setLongRestDuration(value : Int){
         settingsDataSource.setLongRestDuration(value)
     }
-    suspend fun setShortRestDuration(value : Long){
+    suspend fun setShortRestDuration(value : Int){
         settingsDataSource.setShortRestDuration(value)
     }
     suspend fun setPomodoroLoops(value : Int){
         settingsDataSource.setPomodoroLoops(value)
+    }
+
+    suspend fun getSettings(): PomodoroSettings{
+        return settingsDataSource.getSettings()
     }
 }
