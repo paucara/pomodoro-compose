@@ -22,14 +22,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pomodorocompose.model.PomodoroSettings
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ){
-    val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = null)
+    val settings = viewModel.settings
     val saveButton by viewModel.saveButton
     PomodoroOptions(
         saveButton,
@@ -38,7 +37,8 @@ fun SettingsScreen(
         viewModel::setPomodoroDuration,
         viewModel::setLongRestDuration,
         viewModel::setShortRestDuration,
-        viewModel::saveChanges
+        viewModel::saveChanges,
+        viewModel::cancelChanges
     )
 }
 @Composable
@@ -49,7 +49,8 @@ fun PomodoroOptions(
     setPomodoroDuration: (Int) -> Unit,
     setLongRestDuration: (Int) -> Unit,
     setShortRestDuration: (Int) -> Unit,
-    saveChanges: () -> Unit
+    saveChanges: () -> Unit,
+    cancelChanges: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -62,8 +63,13 @@ fun PomodoroOptions(
             SelectNumberButton("Break Time", settings.shortRestDuration, setShortRestDuration, 5)
             SelectNumberButton("Long Break Time", settings.longRestDuration,setLongRestDuration, 5)
         }
-        Button(onClick = { saveChanges() }, modifier = Modifier.alpha(saveButton)) {
-            Text(text = "Save")
+        Row {
+            Button(onClick = { saveChanges() }, modifier = Modifier.alpha(saveButton)) {
+                Text(text = "Save")
+            }
+            Button(onClick = { cancelChanges() }, modifier = Modifier.alpha(saveButton)) {
+                Text(text = "Cancel")
+            }
         }
     }
 }

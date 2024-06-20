@@ -22,16 +22,16 @@ class Pomodoro @Inject constructor(
         settingsUpdate()
     }
 
-    private var POMODORO_DURATION = 0L
-    private var LONG_REST_DURATION = 0L
-    private var SHORT_REST_DURATION = 0L
-    private var POMODORO_LOOPS = 0
+    private var pomodoroDuration = 0L
+    private var longRestDuration = 0L
+    private var shortRestDuration = 0L
+    private var pomodoroLoops = 0
 
-    private var pomodoroFlow = MutableStateFlow(POMODORO_DURATION)
+    private var pomodoroFlow = MutableStateFlow(pomodoroDuration)
 
     private var pomodoroJob: Job? = null
     private var pomodoroBreak = true
-    private var pomodoroLoops = 0
+    private var currentLoops = 0
 
     private val _pomodoroPause = MutableStateFlow(false)
     val pomodoroPause: StateFlow<Boolean> = _pomodoroPause.asStateFlow()
@@ -58,25 +58,25 @@ class Pomodoro @Inject constructor(
     fun cancel() {
         _pomodoroPause.value = false
         pomodoroJob?.cancel()
-        pomodoroFlow.value = POMODORO_DURATION
+        pomodoroFlow.value = pomodoroDuration
         pomodoroBreak = true
-        pomodoroLoops = 0
+        currentLoops = 0
     }
     private fun pomodoro() {
         _pomodoroPause.value = false
         pomodoroJob?.cancel()
         if (pomodoroBreak) {
-            if (pomodoroLoops < POMODORO_LOOPS) {
-                pomodoroFlow.value = SHORT_REST_DURATION
-                pomodoroLoops++
+            if (currentLoops < pomodoroLoops) {
+                pomodoroFlow.value = shortRestDuration
+                currentLoops++
             } else {
-                pomodoroFlow.value = LONG_REST_DURATION
-                pomodoroLoops = 0
+                pomodoroFlow.value = longRestDuration
+                currentLoops = 0
             }
             notificationManager.createAndShowNotification("Time to rest")
             pomodoroBreak = false
         } else {
-            pomodoroFlow.value = POMODORO_DURATION
+            pomodoroFlow.value = pomodoroDuration
             pomodoroBreak = true
             notificationManager.createAndShowNotification("Time to study")
         }
@@ -85,11 +85,11 @@ class Pomodoro @Inject constructor(
     fun settingsUpdate() {
         scope.launch {
             val settings = settingsRepository.getSettings()
-            POMODORO_DURATION = (settings.pomodoroDuration * 1000).toLong()
-            pomodoroFlow.value = POMODORO_DURATION
-            LONG_REST_DURATION = (settings.longRestDuration * 100).toLong()
-            SHORT_REST_DURATION = (settings.shortRestDuration * 1000).toLong()
-            POMODORO_LOOPS = settings.pomodoroLoops
+            pomodoroDuration = (settings.pomodoroDuration * 1000).toLong()
+            pomodoroFlow.value = pomodoroDuration
+            longRestDuration = (settings.longRestDuration * 100).toLong()
+            shortRestDuration = (settings.shortRestDuration * 1000).toLong()
+            pomodoroLoops = settings.pomodoroLoops
         }
     }
     companion object{

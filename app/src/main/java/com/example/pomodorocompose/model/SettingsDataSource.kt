@@ -35,29 +35,25 @@ class SettingsDataSource @Inject constructor(private val context: Context) {
     suspend fun setPomodoroDuration(value : Int){
         context.dataStore.edit { preferences ->
             val currentValue = preferences[POMODORO_DURATION] ?: 25
-            val newValue = currentValue + value
-            preferences[POMODORO_DURATION] = newValue
+            preferences[POMODORO_DURATION] = value
         }
     }
     suspend fun setLongRestDuration(value : Int){
         context.dataStore.edit { preferences ->
             val currentValue = preferences[LONG_REST_DURATION] ?: 15
-            val newValue = currentValue + value
-            preferences[LONG_REST_DURATION] = newValue
+            preferences[LONG_REST_DURATION] = value
         }
     }
     suspend fun setShortRestDuration(value : Int){
         context.dataStore.edit { preferences ->
             val currentValue = preferences[SHORT_REST_DURATION] ?: 5
-            val newValue = currentValue + value
-            preferences[SHORT_REST_DURATION] = newValue
+            preferences[SHORT_REST_DURATION] = value
         }
     }
     suspend fun setPomodoroLoops(value : Int){
         context.dataStore.edit { preferences ->
             val currentValue = preferences[POMODORO_LOOPS] ?: 4
-            val newValue = currentValue + value
-            preferences[POMODORO_LOOPS] = newValue
+            preferences[POMODORO_LOOPS] = value
         }
     }
 
