@@ -1,6 +1,6 @@
 package com.example.pomodorocompose.domain
 
-import com.example.pomodorocompose.model.SettingsRepository
+import com.example.pomodorocompose.data.SettingsRepository
 import com.example.pomodorocompose.utils.formatTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -28,7 +28,6 @@ class Pomodoro @Inject constructor(
     private var pomodoroLoops = 0
 
     private var pomodoroFlow = MutableStateFlow(pomodoroDuration)
-
     private var pomodoroJob: Job? = null
     private var pomodoroBreak = true
     private var currentLoops = 0

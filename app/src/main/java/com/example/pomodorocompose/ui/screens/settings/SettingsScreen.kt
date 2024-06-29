@@ -22,33 +22,36 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pomodorocompose.model.PomodoroSettings
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.example.pomodorocompose.data.model.PomodoroSettings
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
-){
+) {
+    LifecycleEventEffect(event = Lifecycle.Event.ON_STOP) {
+        viewModel.setButtons(0F)
+        viewModel.updatedSettings()
+    }
+
     val settings = viewModel.settings
-    val saveButton by viewModel.saveButton
+    val saveButton by viewModel.buttons
+
     PomodoroOptions(
         saveButton,
         settings,
-        viewModel::setPomodoroLoops,
-        viewModel::setPomodoroDuration,
-        viewModel::setLongRestDuration,
-        viewModel::setShortRestDuration,
+        viewModel::setPomodoroSettings,
         viewModel::saveChanges,
         viewModel::cancelChanges
     )
 }
+
 @Composable
 fun PomodoroOptions(
     saveButton: Float,
     settings: PomodoroSettings?,
-    setPomodoroLoops: (Int) -> Unit,
-    setPomodoroDuration: (Int) -> Unit,
-    setLongRestDuration: (Int) -> Unit,
-    setShortRestDuration: (Int) -> Unit,
+    setPomodoroSettings: (Int, PomodoroOptions) -> Unit,
     saveChanges: () -> Unit,
     cancelChanges: () -> Unit
 ) {
@@ -58,56 +61,90 @@ fun PomodoroOptions(
         verticalArrangement = Arrangement.Center
     ) {
         settings?.let {
-            SelectNumberButton("Focus Count", settings.pomodoroLoops, setPomodoroLoops, 1)
-            SelectNumberButton("Focus Time", settings.pomodoroDuration, setPomodoroDuration, 5)
-            SelectNumberButton("Break Time", settings.shortRestDuration, setShortRestDuration, 5)
-            SelectNumberButton("Long Break Time", settings.longRestDuration,setLongRestDuration, 5)
+            SelectNumberButton(
+                "Focus Count",
+                settings.pomodoroLoops,
+                setPomodoroSettings,
+                PomodoroOptions.PomodoroLoops.increment,
+                PomodoroOptions.PomodoroLoops
+            )
+            SelectNumberButton(
+                "Focus Time",
+                settings.pomodoroDuration,
+                setPomodoroSettings,
+                PomodoroOptions.PomodoroDuration.increment,
+                PomodoroOptions.PomodoroDuration
+            )
+            SelectNumberButton(
+                "Break Time",
+                settings.shortRestDuration,
+                setPomodoroSettings,
+                PomodoroOptions.ShortBreak.increment,
+                PomodoroOptions.ShortBreak
+            )
+            SelectNumberButton(
+                "Long Break Time",
+                settings.longRestDuration,
+                setPomodoroSettings,
+                PomodoroOptions.LongBreak.increment,
+                PomodoroOptions.LongBreak
+            )
         }
-        Row {
-            Button(onClick = { saveChanges() }, modifier = Modifier.alpha(saveButton)) {
-                Text(text = "Save")
-            }
-            Button(onClick = { cancelChanges() }, modifier = Modifier.alpha(saveButton)) {
-                Text(text = "Cancel")
-            }
+        Row(modifier = Modifier.alpha(saveButton)) {
+            SettingsChangeButton("Save", saveChanges
+            )
+            SettingsChangeButton("Cancel", cancelChanges
+            )
         }
     }
 }
 
 @Composable
-fun SelectNumberButton(title: String, default: Int, onClick: (Int) -> Unit, increment: Int) {
+fun SettingsChangeButton(text : String, onClick : ()->Unit){
+    Button(onClick = onClick, modifier = Modifier.padding(20.dp)){
+        Text(text = text)
+    }
+}
+
+@Composable
+fun SelectNumberButton(
+    title: String,
+    duration: Int,
+    onClick: (Int, PomodoroOptions) -> Unit,
+    increment: Int,
+    option: PomodoroOptions
+) {
     Row(
         modifier = Modifier.padding(horizontal = 50.dp),
         verticalAlignment = Alignment.CenterVertically
 
     ) {
         Text(text = title, textAlign = TextAlign.Start, modifier = Modifier.weight(2F))
-        Row(modifier = Modifier.weight(1F),verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.weight(1F)){
-                CounterButton(Icons.Filled.KeyboardArrowLeft) { onClick(-increment) }
+        Row(modifier = Modifier.weight(1F), verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier.weight(1F)) {
+                CounterButton(Icons.Filled.KeyboardArrowLeft) { onClick(-increment, option) }
             }
-            Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center){
-                NumberValue(default)
+            Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center) {
+                NumberValue(duration)
             }
-            Box(modifier = Modifier.weight(1F)){
-                CounterButton(Icons.Filled.KeyboardArrowRight){ onClick(increment) }
+            Box(modifier = Modifier.weight(1F)) {
+                CounterButton(Icons.Filled.KeyboardArrowRight) { onClick(increment, option) }
             }
         }
     }
 }
 
 
-
 @Composable
-fun NumberValue(value : Int) {
+fun NumberValue(value: Int) {
     Text(text = value.toString())
 }
 
 @Composable
-fun CounterButton(icon : ImageVector, onClick : () -> Unit) {
+fun CounterButton(icon: ImageVector, onClick: () -> Unit) {
     IconButton(
         onClick = { onClick() }
-    ){
+    ) {
         Icon(imageVector = icon, contentDescription = null)
     }
 }

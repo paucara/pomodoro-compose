@@ -1,5 +1,6 @@
-package com.example.pomodorocompose.model
+package com.example.pomodorocompose.data
 
+import com.example.pomodorocompose.data.model.PomodoroSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class SettingsRepository @Inject constructor(private val settingsDataSource: Set
         settingsDataSource.setPomodoroLoops(value)
     }
 
-    suspend fun getSettings(): PomodoroSettings{
+    suspend fun getSettings(): PomodoroSettings {
         return settingsDataSource.getSettings()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.model
+package com.example.pomodorocompose.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.pomodorocompose.data.model.PomodoroSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -57,7 +58,7 @@ class SettingsDataSource @Inject constructor(private val context: Context) {
         }
     }
 
-    suspend fun getSettings() : PomodoroSettings{
+    suspend fun getSettings() : PomodoroSettings {
         return PomodoroSettings(
             context.dataStore.data.first()[POMODORO_DURATION] ?: 25,
             context.dataStore.data.first()[LONG_REST_DURATION] ?: 15,

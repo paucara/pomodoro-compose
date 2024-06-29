@@ -2,7 +2,7 @@ package com.example.pomodorocompose.module
 
 import com.example.pomodorocompose.domain.NotificationManager
 import com.example.pomodorocompose.domain.Pomodoro
-import com.example.pomodorocompose.model.SettingsRepository
+import com.example.pomodorocompose.data.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

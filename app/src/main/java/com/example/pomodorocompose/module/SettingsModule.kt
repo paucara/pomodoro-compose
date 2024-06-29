@@ -1,8 +1,8 @@
 package com.example.pomodorocompose.module
 
 import android.content.Context
-import com.example.pomodorocompose.model.SettingsDataSource
-import com.example.pomodorocompose.model.SettingsRepository
+import com.example.pomodorocompose.data.SettingsDataSource
+import com.example.pomodorocompose.data.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
