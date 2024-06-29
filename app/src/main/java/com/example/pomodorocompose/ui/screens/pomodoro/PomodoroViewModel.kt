@@ -1,10 +1,8 @@
 package com.example.pomodorocompose.ui.screens.pomodoro
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.pomodorocompose.domain.Pomodoro
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

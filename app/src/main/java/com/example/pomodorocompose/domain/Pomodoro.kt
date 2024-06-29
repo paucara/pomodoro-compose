@@ -15,7 +15,6 @@ import javax.inject.Inject
 
 class Pomodoro @Inject constructor(
     private val scope : CoroutineScope,
-    private val notificationManager: NotificationManager,
     private val settingsRepository: SettingsRepository
 ){
     init {
@@ -36,6 +35,9 @@ class Pomodoro @Inject constructor(
     val pomodoroPause: StateFlow<Boolean> = _pomodoroPause.asStateFlow()
 
     val formattedTime: Flow<String> = pomodoroFlow.map { formatTime(it) }
+
+    private val _message = MutableStateFlow("")
+    val message: StateFlow<String> = _message.asStateFlow()
 
     var isRunning = false
 
@@ -72,12 +74,12 @@ class Pomodoro @Inject constructor(
                 pomodoroFlow.value = longRestDuration
                 currentLoops = 0
             }
-            notificationManager.createAndShowNotification("Time to rest")
+            _message.value = "Time to rest"
             pomodoroBreak = false
         } else {
             pomodoroFlow.value = pomodoroDuration
             pomodoroBreak = true
-            notificationManager.createAndShowNotification("Time to study")
+            _message.value = "Time to study"
         }
     }
 

@@ -1,25 +1,37 @@
 package com.example.pomodorocompose
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.pomodorocompose.domain.NotificationManager
+import com.example.pomodorocompose.domain.Pomodoro
 import com.example.pomodorocompose.ui.screens.main.MainScreen
 import com.example.pomodorocompose.ui.theme.PomodoroComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var notificationManager : NotificationManager
+    @Inject lateinit var pomodoro : Pomodoro
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestNotificationPermission()
+
+        this.lifecycleScope.launch {
+            pomodoro.message.drop(1).collect{
+                notificationManager.createAndShowNotification(it)
+            }
+        }
+
         setContent {
             PomodoroComposeTheme {
                 Surface(
@@ -28,33 +40,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen()
                 }
-            }
-        }
-    }
-
-    private fun requestNotificationPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            val shouldShowRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            )
-
-            if (shouldShowRationale) {
-                Toast.makeText(
-                    this,
-                    "The application needs permission to display notifications",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    456
-                )
             }
         }
     }

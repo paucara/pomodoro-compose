@@ -25,7 +25,7 @@ import com.example.pomodorocompose.R
 
 @Composable
 fun PomodoroScreen(
-    viewModel : PomodoroViewModel = hiltViewModel()
+    viewModel: PomodoroViewModel = hiltViewModel()
 ){
     val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
