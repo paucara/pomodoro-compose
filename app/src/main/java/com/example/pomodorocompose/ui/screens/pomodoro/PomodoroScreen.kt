@@ -1,6 +1,7 @@
 package com.example.pomodorocompose.ui.screens.pomodoro
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,11 +18,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dotlottie.dlplayer.Mode
 import com.example.pomodorocompose.R
+import com.lottiefiles.dotlottie.core.compose.ui.DotLottieAnimation
+import com.lottiefiles.dotlottie.core.util.DotLottieSource
+
 
 @Composable
 fun PomodoroScreen(
@@ -36,7 +42,21 @@ fun PomodoroScreen(
     ) {
         Timer(time.value)
         Buttons(viewModel::start, viewModel::pause, viewModel::cancel, uiState.value)
+        LottieAnimation()
     }
+}
+
+@Composable
+fun LottieAnimation() {
+    DotLottieAnimation(
+        source = DotLottieSource.Asset("animation.json"),
+        autoplay = true,
+        loop = true,
+        speed = 3.0f,
+        useFrameInterpolation = false,
+        playMode = Mode.FORWARD,
+        modifier = Modifier.background(Color.Transparent)
+    )
 }
 
 @Composable
