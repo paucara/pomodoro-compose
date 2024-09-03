@@ -1,6 +1,8 @@
 package com.example.pomodorocompose.domain
 
 import com.example.pomodorocompose.data.SettingsRepository
+import com.example.pomodorocompose.data.StatisticsRepository
+import com.example.pomodorocompose.data.model.Statistic
 import com.example.pomodorocompose.utils.formatTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -11,11 +13,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 class Pomodoro @Inject constructor(
     private val scope : CoroutineScope,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val statisticsRepository: StatisticsRepository
 ){
     init {
         settingsUpdate()
@@ -69,9 +73,14 @@ class Pomodoro @Inject constructor(
         if (pomodoroBreak) {
             if (currentLoops < pomodoroLoops) {
                 pomodoroFlow.value = shortRestDuration
+
                 currentLoops++
             } else {
                 pomodoroFlow.value = longRestDuration
+
+                val statistic = Statistic(datePomodoro = LocalDate.now(), pomodoroCount = 1)
+                statisticsRepository.insertOrUpdateStatistic(statistic)
+
                 currentLoops = 0
             }
             _message.value = "Time to rest"

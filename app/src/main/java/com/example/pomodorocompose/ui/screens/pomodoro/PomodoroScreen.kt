@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -35,19 +37,25 @@ fun PomodoroScreen(
 ){
     val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-
     Column(modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Timer(time.value)
-        Buttons(viewModel::start, viewModel::pause, viewModel::cancel, uiState.value)
-        LottieAnimation()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier.weight(1.5F)
+        ) {
+            Timer(time.value, modifier = Modifier.padding(bottom = 10.dp))
+            Buttons(viewModel::start, viewModel::pause, viewModel::cancel, uiState.value, modifier = Modifier)
+        }
+        val visible = if (uiState.value) 1F else 0F
+        LottieAnimation(modifier = Modifier.weight(1F).alpha(visible))
     }
 }
 
 @Composable
-fun LottieAnimation() {
+fun LottieAnimation(modifier : Modifier) {
     DotLottieAnimation(
         source = DotLottieSource.Asset("animation.json"),
         autoplay = true,
@@ -55,7 +63,7 @@ fun LottieAnimation() {
         speed = 3.0f,
         useFrameInterpolation = false,
         playMode = Mode.FORWARD,
-        modifier = Modifier.background(Color.Transparent)
+        modifier = modifier.background(Color.Transparent)
     )
 }
 
@@ -64,11 +72,11 @@ fun Buttons(
     start : ()->Unit,
     pause : ()->Unit,
     stop : ()->Unit,
-    uiState: Boolean
+    uiState: Boolean,
+    modifier : Modifier
 ) {
     Row(
-        Modifier
-            .animateContentSize()
+        modifier = modifier.animateContentSize()
     ) {
         when(uiState){
             true -> {
@@ -84,11 +92,12 @@ fun Buttons(
 }
 
 @Composable
-fun Timer(time : String?) {
+fun Timer(time: String?, modifier : Modifier) {
     if (time != null) {
         Text(
             text = time,
-            style = MaterialTheme.typography.displayLarge
+            style = MaterialTheme.typography.displayLarge,
+            modifier = modifier
         )
     }
 }

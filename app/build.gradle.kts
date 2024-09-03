@@ -85,11 +85,17 @@ dependencies {
     //datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
+    val lifecycleVersion = "2.8.2"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
 
     //Lottie Animation
     implementation("com.github.LottieFiles:dotlottie-android:0.4.1")
+
+    //Room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 }
 
 kapt {

@@ -1,8 +1,12 @@
 package com.example.pomodorocompose.module
 
 import android.content.Context
+import androidx.room.Room
 import com.example.pomodorocompose.data.SettingsDataSource
 import com.example.pomodorocompose.data.SettingsRepository
+import com.example.pomodorocompose.data.StatisticsDao
+import com.example.pomodorocompose.data.StatisticsDataBase
+import com.example.pomodorocompose.data.StatisticsRepository
 import com.example.pomodorocompose.domain.NotificationManager
 import com.example.pomodorocompose.domain.Pomodoro
 import dagger.Module
@@ -56,6 +60,32 @@ class NotificationModule {
         @ActivityContext context: Context
     ) : NotificationManager {
         return NotificationManager(context)
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    @Provides
+    @Singleton
+    fun provideStatisticsDataSource(@ApplicationContext appContext: Context): StatisticsDataBase {
+        return Room.databaseBuilder(
+            appContext,
+            StatisticsDataBase::class.java,
+            "statistics_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDao(statisticsDataBase: StatisticsDataBase) : StatisticsDao{
+        return statisticsDataBase.statisticsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStatisticsRepository(statisticsDao : StatisticsDao): StatisticsRepository {
+        return StatisticsRepository(statisticsDao)
     }
 }
 

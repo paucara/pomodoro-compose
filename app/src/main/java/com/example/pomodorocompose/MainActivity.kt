@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
                 notificationManager.createAndShowNotification(it)
             }
         }
-        
 
         setContent {
             PomodoroComposeTheme {

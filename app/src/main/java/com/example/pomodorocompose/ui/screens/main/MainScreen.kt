@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pomodorocompose.ui.screens.pomodoro.PomodoroScreen
 import com.example.pomodorocompose.ui.screens.settings.SettingsScreen
+import com.example.pomodorocompose.ui.screens.statistics.StatisticsScreen
 
 @Composable
 fun MainScreen() {
@@ -51,9 +52,10 @@ fun MyNavHost(navController: NavHostController) {
         ) { PomodoroScreen() }
         composable(
             NavigationItem.Settings.route
-        ) {
-            SettingsScreen()
-        }
+        ) { SettingsScreen() }
+        composable(
+            NavigationItem.Statistics.route
+        ) { StatisticsScreen() }
     }
 }
 
@@ -61,7 +63,8 @@ fun MyNavHost(navController: NavHostController) {
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         NavigationItem.Pomodoro,
-        NavigationItem.Settings
+        NavigationItem.Settings,
+        NavigationItem.Statistics
     )
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.background,
@@ -71,7 +74,6 @@ fun BottomNavigationBar(navController: NavHostController) {
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
-
             NavigationBarItem(
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = MaterialTheme.colorScheme.primary,
