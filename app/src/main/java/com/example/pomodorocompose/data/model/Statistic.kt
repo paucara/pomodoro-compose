@@ -8,6 +8,5 @@ import java.time.LocalDate
 @Entity
 data class Statistic(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
-    @ColumnInfo(name = "date_pomodoro") val datePomodoro : LocalDate?,
-    @ColumnInfo(name = "pomodoro_count") var pomodoroCount: Long?
+    @ColumnInfo(name = "date_pomodoro") val datePomodoro : LocalDate?
 )

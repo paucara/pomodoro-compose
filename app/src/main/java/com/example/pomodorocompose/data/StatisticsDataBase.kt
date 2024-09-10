@@ -12,6 +12,7 @@ import androidx.room.TypeConverters
 import androidx.room.Update
 import com.example.pomodorocompose.data.model.Statistic
 import com.example.pomodorocompose.utils.Converters
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Database(entities = [Statistic::class], version = 1)
@@ -40,7 +41,7 @@ abstract class StatisticsDataBase : RoomDatabase() {
 @Dao
 interface StatisticsDao {
     @Query("SELECT * FROM statistic")
-    fun getAll(): List<Statistic>
+    fun getAll(): Flow<List<Statistic>>
 
     @Insert
     fun insert(statistic: Statistic)
@@ -50,7 +51,4 @@ interface StatisticsDao {
 
     @Update
     fun update(statistic: Statistic)
-
-    @Query("SELECT * FROM statistic WHERE date_pomodoro = :date")
-    fun getByDate(date: LocalDate): Statistic
 }

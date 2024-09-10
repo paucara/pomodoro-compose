@@ -1,21 +1,18 @@
 package com.example.pomodorocompose.data
 
 import com.example.pomodorocompose.data.model.Statistic
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import javax.inject.Inject
 
 class StatisticsRepository @Inject constructor(
     private val statisticsDao: StatisticsDao
 ) {
-    private fun insertStatistic(statistic: Statistic) {
+    fun insertStatistic(statistic: Statistic) {
         statisticsDao.insert(statistic)
     }
 
-    private fun getStatisticByDate(date: LocalDate): Statistic {
-        return statisticsDao.getByDate(date)
-    }
-
-    private fun updateStatistic(statistic: Statistic) {
+    fun updateStatistic(statistic: Statistic) {
         statisticsDao.update(statistic)
     }
 
@@ -23,17 +20,7 @@ class StatisticsRepository @Inject constructor(
         statisticsDao.delete(statistic)
     }
 
-    fun getAllStatistic(): List<Statistic> {
+    fun getAllStatistic(): Flow<List<Statistic>> {
         return statisticsDao.getAll()
-    }
-
-    fun insertOrUpdateStatistic(statistic: Statistic){
-        val existingStatistic = getStatisticByDate(LocalDate.now())
-        if(existingStatistic == null){
-            insertStatistic(statistic)
-        }else{
-            val statisticAux = existingStatistic.copy(pomodoroCount = existingStatistic.pomodoroCount!! + 1)
-            updateStatistic(statisticAux)
-        }
     }
 }

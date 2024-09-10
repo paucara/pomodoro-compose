@@ -31,9 +31,10 @@ object PomodoroModule {
     @Singleton
     fun providePomodoro(
         coroutineScope: CoroutineScope,
-        settingsRepository: SettingsRepository
+        settingsRepository: SettingsRepository,
+        statisticsRepository: StatisticsRepository
     ): Pomodoro {
-        return Pomodoro(coroutineScope, settingsRepository)
+        return Pomodoro(coroutineScope, settingsRepository, statisticsRepository)
     }
     @Provides
     @Singleton
@@ -49,26 +50,9 @@ object PomodoroModule {
     ) : SettingsDataSource {
         return SettingsDataSource(context)
     }
-
-}
-
-@Module
-@InstallIn(ActivityComponent::class)
-class NotificationModule {
-    @Provides
-    fun provideNotificationManager(
-        @ActivityContext context: Context
-    ) : NotificationManager {
-        return NotificationManager(context)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
     @Provides
     @Singleton
-    fun provideStatisticsDataSource(@ApplicationContext appContext: Context): StatisticsDataBase {
+    fun provideStatisticsDataBase(@ApplicationContext appContext: Context): StatisticsDataBase {
         return Room.databaseBuilder(
             appContext,
             StatisticsDataBase::class.java,
@@ -87,5 +71,16 @@ object AppModule {
     fun provideStatisticsRepository(statisticsDao : StatisticsDao): StatisticsRepository {
         return StatisticsRepository(statisticsDao)
     }
+
 }
 
+@Module
+@InstallIn(ActivityComponent::class)
+class NotificationModule {
+    @Provides
+    fun provideNotificationManager(
+        @ActivityContext context: Context
+    ) : NotificationManager {
+        return NotificationManager(context)
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.pomodorocompose.domain
 
+import android.util.Log
 import com.example.pomodorocompose.data.SettingsRepository
 import com.example.pomodorocompose.data.StatisticsRepository
 import com.example.pomodorocompose.data.model.Statistic
@@ -71,17 +72,13 @@ class Pomodoro @Inject constructor(
         _pomodoroPause.value = false
         pomodoroJob?.cancel()
         if (pomodoroBreak) {
-            if (currentLoops < pomodoroLoops) {
+            if (currentLoops < pomodoroLoops-1) {
                 pomodoroFlow.value = shortRestDuration
-
                 currentLoops++
             } else {
                 pomodoroFlow.value = longRestDuration
-
-                val statistic = Statistic(datePomodoro = LocalDate.now(), pomodoroCount = 1)
-                statisticsRepository.insertOrUpdateStatistic(statistic)
-
                 currentLoops = 0
+                statisticsRepository.insertStatistic(Statistic(datePomodoro = LocalDate.now()))
             }
             _message.value = "Time to rest"
             pomodoroBreak = false
@@ -97,7 +94,7 @@ class Pomodoro @Inject constructor(
             val settings = settingsRepository.getSettings()
             pomodoroDuration = (settings.pomodoroDuration * 1000).toLong()
             pomodoroFlow.value = pomodoroDuration
-            longRestDuration = (settings.longRestDuration * 100).toLong()
+            longRestDuration = (settings.longRestDuration * 1000).toLong()
             shortRestDuration = (settings.shortRestDuration * 1000).toLong()
             pomodoroLoops = settings.pomodoroLoops
         }
