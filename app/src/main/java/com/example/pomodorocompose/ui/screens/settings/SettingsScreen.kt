@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -91,17 +91,19 @@ fun PomodoroOptions(
             )
         }
         Row(modifier = Modifier.alpha(saveButton)) {
-            SettingsChangeButton("Save", saveChanges
+            SettingsChangeButton(
+                "Save", saveChanges
             )
-            SettingsChangeButton("Cancel", cancelChanges
+            SettingsChangeButton(
+                "Cancel", cancelChanges
             )
         }
     }
 }
 
 @Composable
-fun SettingsChangeButton(text : String, onClick : ()->Unit){
-    Button(onClick = onClick, modifier = Modifier.padding(20.dp)){
+fun SettingsChangeButton(text: String, onClick: () -> Unit) {
+    Button(onClick = onClick, modifier = Modifier.padding(20.dp)) {
         Text(text = text)
     }
 }
@@ -122,13 +124,23 @@ fun SelectNumberButton(
         Text(text = title, textAlign = TextAlign.Start, modifier = Modifier.weight(2F))
         Row(modifier = Modifier.weight(1F), verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.weight(1F)) {
-                CounterButton(Icons.Filled.KeyboardArrowLeft) { onClick(-increment, option) }
+                CounterButton(Icons.AutoMirrored.Filled.KeyboardArrowLeft) {
+                    onClick(
+                        -increment,
+                        option
+                    )
+                }
             }
             Box(modifier = Modifier.weight(1F), contentAlignment = Alignment.Center) {
                 NumberValue(duration)
             }
             Box(modifier = Modifier.weight(1F)) {
-                CounterButton(Icons.Filled.KeyboardArrowRight) { onClick(increment, option) }
+                CounterButton(Icons.AutoMirrored.Filled.KeyboardArrowRight) {
+                    onClick(
+                        increment,
+                        option
+                    )
+                }
             }
         }
     }

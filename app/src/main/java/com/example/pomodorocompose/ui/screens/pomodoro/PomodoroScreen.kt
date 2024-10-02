@@ -34,10 +34,11 @@ import com.lottiefiles.dotlottie.core.util.DotLottieSource
 @Composable
 fun PomodoroScreen(
     viewModel: PomodoroViewModel = hiltViewModel()
-){
+) {
     val time = viewModel.time.collectAsStateWithLifecycle(initialValue = null)
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -47,15 +48,23 @@ fun PomodoroScreen(
             modifier = Modifier.weight(1.5F)
         ) {
             Timer(time.value, modifier = Modifier.padding(bottom = 10.dp))
-            Buttons(viewModel::start, viewModel::pause, viewModel::cancel, uiState.value, modifier = Modifier)
+            Buttons(
+                viewModel::start,
+                viewModel::pause,
+                viewModel::cancel,
+                uiState.value,
+                modifier = Modifier
+            )
         }
         val visible = if (uiState.value) 1F else 0F
-        LottieAnimation(modifier = Modifier.weight(1F).alpha(visible))
+        LottieAnimation(modifier = Modifier
+            .weight(1F)
+            .alpha(visible))
     }
 }
 
 @Composable
-fun LottieAnimation(modifier : Modifier) {
+fun LottieAnimation(modifier: Modifier) {
     DotLottieAnimation(
         source = DotLottieSource.Asset("animation.json"),
         autoplay = true,
@@ -69,30 +78,31 @@ fun LottieAnimation(modifier : Modifier) {
 
 @Composable
 fun Buttons(
-    start : ()->Unit,
-    pause : ()->Unit,
-    stop : ()->Unit,
+    start: () -> Unit,
+    pause: () -> Unit,
+    stop: () -> Unit,
     uiState: Boolean,
-    modifier : Modifier
+    modifier: Modifier
 ) {
     Row(
         modifier = modifier.animateContentSize()
     ) {
-        when(uiState){
+        when (uiState) {
             true -> {
                 TimerButton(action = pause, text = "pause", painter = R.drawable.pause)
                 Spacer(modifier = Modifier.width(5.dp))
-                TimerButton(action = stop, text = "stop",  painter = R.drawable.stop)
+                TimerButton(action = stop, text = "stop", painter = R.drawable.stop)
             }
+
             false -> {
-                TimerButton(action = start, text = "start",  painter = R.drawable.play)
+                TimerButton(action = start, text = "start", painter = R.drawable.play)
             }
         }
     }
 }
 
 @Composable
-fun Timer(time: String?, modifier : Modifier) {
+fun Timer(time: String?, modifier: Modifier) {
     if (time != null) {
         Text(
             text = time,

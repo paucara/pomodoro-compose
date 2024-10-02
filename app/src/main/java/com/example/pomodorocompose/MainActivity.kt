@@ -1,6 +1,5 @@
 package com.example.pomodorocompose
 
-import android.content.res.loader.AssetsProvider
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,7 +12,6 @@ import com.example.pomodorocompose.domain.NotificationManager
 import com.example.pomodorocompose.domain.Pomodoro
 import com.example.pomodorocompose.ui.screens.main.MainScreen
 import com.example.pomodorocompose.ui.theme.PomodoroComposeTheme
-import com.lottiefiles.dotlottie.core.loader.AssetLoader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
@@ -21,19 +19,18 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var notificationManager: NotificationManager
 
-    @Inject lateinit var notificationManager : NotificationManager
-    @Inject lateinit var pomodoro : Pomodoro
-
+    @Inject
+    lateinit var pomodoro: Pomodoro
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         this.lifecycleScope.launch {
-            pomodoro.message.drop(1).collect{
+            pomodoro.message.drop(1).collect {
                 notificationManager.createAndShowNotification(it)
             }
         }
-
         setContent {
             PomodoroComposeTheme {
                 Surface(

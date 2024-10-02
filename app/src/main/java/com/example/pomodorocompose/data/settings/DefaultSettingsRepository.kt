@@ -1,11 +1,11 @@
-package com.example.pomodorocompose.data
+package com.example.pomodorocompose.data.settings
 
 import com.example.pomodorocompose.data.model.PomodoroSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
-class SettingsRepository @Inject constructor(private val settingsDataSource: SettingsDataSource) {
+class DefaultSettingsRepository @Inject constructor(private val settingsDataSource: SettingsDataSource) : SettingsRepository{
 
     val settings: Flow<PomodoroSettings> =
         combine(
@@ -17,20 +17,19 @@ class SettingsRepository @Inject constructor(private val settingsDataSource: Set
             PomodoroSettings(pomodoroDuration, longRestDuration, shortRestDuration, pomodoroLoops)
         }
 
-    suspend fun setPomodoroDuration(value : Int){
+    override suspend fun setPomodoroDuration(value : Int){
         settingsDataSource.setPomodoroDuration(value)
     }
-    suspend fun setLongRestDuration(value : Int){
+    override suspend fun setLongRestDuration(value : Int){
         settingsDataSource.setLongRestDuration(value)
     }
-    suspend fun setShortRestDuration(value : Int){
+    override suspend fun setShortRestDuration(value : Int){
         settingsDataSource.setShortRestDuration(value)
     }
-    suspend fun setPomodoroLoops(value : Int){
+    override suspend fun setPomodoroLoops(value : Int){
         settingsDataSource.setPomodoroLoops(value)
     }
-
-    suspend fun getSettings(): PomodoroSettings {
+    override suspend fun getSettings(): PomodoroSettings {
         return settingsDataSource.getSettings()
     }
 }

@@ -1,19 +1,20 @@
-package com.example.pomodorocompose.module
+package com.example.pomodorocompose.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.pomodorocompose.data.SettingsDataSource
-import com.example.pomodorocompose.data.SettingsRepository
-import com.example.pomodorocompose.data.StatisticsDao
-import com.example.pomodorocompose.data.StatisticsDataBase
-import com.example.pomodorocompose.data.StatisticsRepository
+import com.example.pomodorocompose.data.settings.DefaultSettingsRepository
+import com.example.pomodorocompose.data.settings.SettingsDataSource
+import com.example.pomodorocompose.data.settings.SettingsRepository
+import com.example.pomodorocompose.data.statistics.DefaultStatisticsRepository
+import com.example.pomodorocompose.data.statistics.StatisticsDao
+import com.example.pomodorocompose.data.statistics.StatisticsDataBase
+import com.example.pomodorocompose.data.statistics.StatisticsRepository
 import com.example.pomodorocompose.domain.NotificationManager
 import com.example.pomodorocompose.domain.Pomodoro
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
@@ -36,13 +37,7 @@ object PomodoroModule {
     ): Pomodoro {
         return Pomodoro(coroutineScope, settingsRepository, statisticsRepository)
     }
-    @Provides
-    @Singleton
-    fun provideSettingsRepository(
-        settingsDataSource: SettingsDataSource
-    ): SettingsRepository {
-        return SettingsRepository(settingsDataSource)
-    }
+
     @Provides
     @Singleton
     fun provideSettingsDataSource(
@@ -62,25 +57,32 @@ object PomodoroModule {
 
     @Provides
     @Singleton
-    fun provideDao(statisticsDataBase: StatisticsDataBase) : StatisticsDao{
+    fun provideDao(statisticsDataBase: StatisticsDataBase) : StatisticsDao {
         return statisticsDataBase.statisticsDao()
     }
 
     @Provides
-    @Singleton
-    fun provideStatisticsRepository(statisticsDao : StatisticsDao): StatisticsRepository {
-        return StatisticsRepository(statisticsDao)
-    }
-
-}
-
-@Module
-@InstallIn(ActivityComponent::class)
-class NotificationModule {
-    @Provides
     fun provideNotificationManager(
-        @ActivityContext context: Context
+        @ApplicationContext context: Context
     ) : NotificationManager {
         return NotificationManager(context)
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class StatisticsModule{
+    @Binds
+    abstract fun bindStatisticsRepository(
+        defaultStatisticsRepository: DefaultStatisticsRepository
+    ) : StatisticsRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class SettingsModule{
+    @Binds
+    abstract fun bindSettingsRepository(
+        defaultSettingsRepository: DefaultSettingsRepository
+    ) : SettingsRepository
 }

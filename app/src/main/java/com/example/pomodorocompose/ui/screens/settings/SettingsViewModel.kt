@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pomodorocompose.domain.Pomodoro
 import com.example.pomodorocompose.data.model.PomodoroSettings
-import com.example.pomodorocompose.data.SettingsRepository
+import com.example.pomodorocompose.data.settings.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

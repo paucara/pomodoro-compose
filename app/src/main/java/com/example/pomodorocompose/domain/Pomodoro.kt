@@ -1,8 +1,7 @@
 package com.example.pomodorocompose.domain
 
-import android.util.Log
-import com.example.pomodorocompose.data.SettingsRepository
-import com.example.pomodorocompose.data.StatisticsRepository
+import com.example.pomodorocompose.data.settings.SettingsRepository
+import com.example.pomodorocompose.data.statistics.StatisticsRepository
 import com.example.pomodorocompose.data.model.Statistic
 import com.example.pomodorocompose.utils.formatTime
 import kotlinx.coroutines.CoroutineScope

@@ -11,6 +11,7 @@ enum class Screen {
     SETTINGS,
     STATISTICS
 }
+
 sealed class NavigationItem(val route: String, val icon: ImageVector) {
     data object Pomodoro : NavigationItem(Screen.POMODORO.name, Icons.Filled.Home)
     data object Settings : NavigationItem(Screen.SETTINGS.name, Icons.Filled.Settings)

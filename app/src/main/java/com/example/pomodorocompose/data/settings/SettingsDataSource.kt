@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.data
+package com.example.pomodorocompose.data.settings
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -35,25 +35,25 @@ class SettingsDataSource @Inject constructor(private val context: Context) {
 
     suspend fun setPomodoroDuration(value : Int){
         context.dataStore.edit { preferences ->
-            val currentValue = preferences[POMODORO_DURATION] ?: 25
+            preferences[POMODORO_DURATION] ?: 25
             preferences[POMODORO_DURATION] = value
         }
     }
     suspend fun setLongRestDuration(value : Int){
         context.dataStore.edit { preferences ->
-            val currentValue = preferences[LONG_REST_DURATION] ?: 15
+            preferences[LONG_REST_DURATION] ?: 15
             preferences[LONG_REST_DURATION] = value
         }
     }
     suspend fun setShortRestDuration(value : Int){
         context.dataStore.edit { preferences ->
-            val currentValue = preferences[SHORT_REST_DURATION] ?: 5
+            preferences[SHORT_REST_DURATION] ?: 5
             preferences[SHORT_REST_DURATION] = value
         }
     }
     suspend fun setPomodoroLoops(value : Int){
         context.dataStore.edit { preferences ->
-            val currentValue = preferences[POMODORO_LOOPS] ?: 4
+            preferences[POMODORO_LOOPS] ?: 4
             preferences[POMODORO_LOOPS] = value
         }
     }

@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.ui.screens.statistics
+package com.example.pomodorocompose.ui.screens.statistics.calendar
 
 
 import androidx.compose.foundation.Image
@@ -43,7 +43,10 @@ fun MyMonthHeader(
             style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = monthState.currentMonth.year.toString(), style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = monthState.currentMonth.year.toString(),
+            style = MaterialTheme.typography.bodyLarge
+        )
         IncrementButton(monthState = monthState)
     }
 }

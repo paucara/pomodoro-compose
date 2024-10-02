@@ -62,8 +62,8 @@ fun MyNavHost(navController: NavHostController, paddingValues: PaddingValues) {
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         NavigationItem.Pomodoro,
-        NavigationItem.Settings,
-        NavigationItem.Statistics
+        NavigationItem.Statistics,
+        NavigationItem.Settings
     )
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.background,

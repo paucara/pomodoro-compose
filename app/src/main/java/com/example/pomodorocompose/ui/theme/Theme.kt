@@ -94,7 +94,8 @@ fun PomodoroComposeTheme(
             window.statusBarColor = colors.background.toArgb()
             window.navigationBarColor = colors.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars =
+                !darkTheme
         }
     }
     MaterialTheme(

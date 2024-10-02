@@ -72,36 +72,34 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     //navigation
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose)
 
     //hilt
-    implementation("com.google.dagger:hilt-android:2.51")
-    kapt("com.google.dagger:hilt-android-compiler:2.51")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //datastore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences)
 
-    val lifecycleVersion = "2.8.2"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v282)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     //Lottie Animation
-    implementation("com.github.LottieFiles:dotlottie-android:0.4.1")
+    implementation(libs.dotlottie.android)
 
     //Room
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-ktx:2.6.1")
-    implementation("androidx.room:room-runtime:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    kapt("androidx.room:room-compiler:2.6.1")
 
     //Calendar
-    implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.3.0")
-    implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.3.0")
+    implementation(libs.composecalendar)
+    implementation(libs.kotlinx.datetime)
 }
 
 kapt {

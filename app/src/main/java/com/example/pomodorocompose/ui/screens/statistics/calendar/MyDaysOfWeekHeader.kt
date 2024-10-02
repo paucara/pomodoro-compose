@@ -1,4 +1,4 @@
-package com.example.pomodorocompose.ui.screens.statistics
+package com.example.pomodorocompose.ui.screens.statistics.calendar
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentHeight
