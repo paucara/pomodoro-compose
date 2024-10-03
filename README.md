@@ -11,6 +11,6 @@
   <li>DataStore</li>
   <li>Room</li>
   <li>Hilt</li>
-  <li><a href="https://github.com/emenjivar/pomodoro-timer/tree/main">Compose calendar</a></li>
+  <li><a href="https://github.com/boguszpawlowski/ComposeCalendar">Compose calendar</a></li>
   <li>Dot Lottie Android</li>
 </ul>
