@@ -13,5 +13,5 @@
   <li>Room</li>
   <li>Hilt</li>
   <li><a href="https://github.com/boguszpawlowski/ComposeCalendar">Compose calendar</a></li>
-  <li>Dot Lottie Android</li>
+  <li><a href="https://github.com/LottieFiles/dotlottie-android">Dot Lottie Android</a></li>
 </ul>
