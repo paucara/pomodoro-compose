@@ -91,10 +91,10 @@ class Pomodoro @Inject constructor(
     fun settingsUpdate() {
         scope.launch {
             val settings = settingsRepository.getSettings()
-            pomodoroDuration = (settings.pomodoroDuration * 1000).toLong()
+            pomodoroDuration = (settings.pomodoroDuration * 60000).toLong()
             pomodoroFlow.value = pomodoroDuration
-            longRestDuration = (settings.longRestDuration * 1000).toLong()
-            shortRestDuration = (settings.shortRestDuration * 1000).toLong()
+            longRestDuration = (settings.longRestDuration * 60000).toLong()
+            shortRestDuration = (settings.shortRestDuration * 60000).toLong()
             pomodoroLoops = settings.pomodoroLoops
         }
     }
