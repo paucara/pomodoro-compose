@@ -1,5 +1,5 @@
 <h1>Pomodoro Compose</h1>
-<img src="https://raw.githubusercontent.com/paucara/pomodoro-compose/refs/heads/master/images/screenshot.jpg">
+<img width="600" src="https://raw.githubusercontent.com/paucara/pomodoro-compose/refs/heads/master/images/screenshot.jpg">
 <h4>It's a simple anti procrastination app that helps you to focus and get your tasks done.</h4>
 <h2>How it works?</h2>
 <h4>The app follow the Pomodoro Technique, breaking the time into two intervals, 25 min to work and 5 min to rest.</h4>
