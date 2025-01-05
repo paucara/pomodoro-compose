@@ -6,7 +6,7 @@ dotlottieAndroid = "0.4.1"
 hiltAndroid = "2.51"
 hiltAndroidCompiler = "2.51"
 hiltNavigationCompose = "1.2.0"
-kotlin = "1.9.0"
+kotlin = "2.0.21"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -54,4 +54,5 @@ lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-com
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
